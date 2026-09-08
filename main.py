@@ -15,6 +15,10 @@ m_u = 1 # amount of upgrades on money
 v_u = 1 # amount of upgrades on votes
 uv_cost = 0
 mv_cost = 0
+pv = 1000000
+rank = Local
+pn = 1
+pb = 1
 
 screen = "main" # too lazy to do enumerators and uh im lazy thanks
 
@@ -149,8 +153,12 @@ def get_width():
 
 
 def loop():
-    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u
+    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb
     while True:
+        if pn == 1:
+            pb = 1
+        if pn >= 2:
+            pb = pn*10
         time.sleep(0.001)
         pln1 = ""
         pln2 = ""
@@ -185,7 +193,8 @@ def loop():
             mln6 += aln6
 
         if screen == "main":
-            output.text = ( f"Mode: Generating {mode}".center(get_width()) + "\n" +
+            output.text = ( f"{votes}".center(get_width()) + "\n" +
+                            f"Mode: Generating {mode}".center(get_width()) + "\n" +
                             f"»-----------------------------------------«".center(get_width()) + "\n" +
                             f"Votes:".center(get_width()) + "\n" + 
                             f"{pln1}".center(get_width()) + "\n" +
@@ -203,14 +212,15 @@ def loop():
                             f"{dollar[4]}   {mln5}".center(get_width()) + "\n" +
                             f"{dollar[5]}   {mln6}".center(get_width()) + "\n" +
                             f"»-----------------------------------------«".center(get_width()) 
+                            f" | [s] shop | [p] prestige | [main] this menu | [q] quit | "
             ) # put text in output.text to add it
         if screen == "shop":
             output.text = ( f"| Money: ${money} | Votes: {votes} |".center(get_width()) + "\n" +
                             f"Super realistic shop".center(get_width()) + "\n" +
                             f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"[uv1] +1 vote per - ${uv_cost}".center(get_width()) + "\n" +
+                            f"[uv1] +{pb} vote per - ${uv_cost}".center(get_width()) + "\n" +
                             f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"[mv1] +1 money per - ${mv_cost}".center(get_width()) + "\n" +
+                            f"[mv1] +{pb} money per - ${mv_cost}".center(get_width()) + "\n" +
                             f"»-----------------------------------------«".center(get_width()) + "\n" +
                             f"Type 'main' to exit".center(get_width())
             )
@@ -230,7 +240,7 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
-    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u
+    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb
     width = get_width()
 
     text = input_box.text.strip()
@@ -238,9 +248,9 @@ def command(event):
     cmds = text.lower().split()
     if not cmds:
         if mode == "votes":
-            votes += 1*v_u
+            votes += 1*v_u*pb
         else:
-            money += 1*m_u
+            money += 1*m_u*pb
         cmds.append("x")
     
     if cmds[0] == "m" or cmds[0] == "mode":
