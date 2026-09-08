@@ -7,7 +7,112 @@ import threading
 import time
 import shutil
 
-utime = 1
+votes = 0
+
+i01 = ["   ██╗   ",
+       "  ███║   ",
+       "  ╚██║   ",
+       "   ██║   ",
+       "   ██║   ",
+       "   ╚═╝   "]
+
+i02 = ["██████╗  ",
+       "╚════██╗ ",
+       " █████╔╝ ",
+       "██╔═══╝  ",
+       "███████╗ ",
+       "╚══════╝ "]
+
+i03 = ["██████╗  ",
+       "╚════██╗ ",
+       " █████╔╝ ",
+       " ╚═══██╗ ",
+       "██████╔╝ ",
+       "╚═════╝  "]
+
+i04 = ["██╗  ██╗ ",
+       "██║  ██║ ",
+       "███████║ ",
+       "╚════██║ ",
+       "     ██║ ",
+       "     ╚═╝ "]
+
+i05 = ["███████╗ ",
+       "██╔════╝ ",
+       "███████╗ ",
+       "╚════██║ ",
+       "███████║ ",
+       "╚══════╝ "]
+
+i06 = [" ██████╗ ",
+       "██╔════╝ ",
+       "███████╗ ",
+       "██╔═══██╗",
+       "╚██████╔╝",
+       " ╚═════╝ "]
+
+i07 = ["███████╗ ",
+       "╚════██║ ",
+       "    ██╔╝ ",
+       "   ██╔╝  ",
+       "   ██║   ",
+       "   ╚═╝   "]
+
+i08 = [" █████╗  ",
+       "██╔══██╗ ",
+       "╚█████╔╝ ",
+       "██╔══██╗ ",
+       "╚█████╔╝ ",
+       " ╚════╝  "]
+
+i09 = [" █████╗  ",
+       "██╔══██╗ ",
+       "╚██████║ ",
+       " ╚═══██║ ",
+       " █████╔╝ ",
+       " ╚════╝  "]
+
+i00 = [" ██████╗ ",
+       "██╔═████╗",
+       "██║██╔██║",
+       "████╔╝██║",
+       "╚██████╔╝",
+       " ╚═════╝ "]
+
+ansi = [" ",
+        " ", # a second one to give more spaces
+        "═",
+        "║",
+        "╔",
+        "╗",
+        "╚",
+        "╝",
+        "█"]
+
+
+index = {
+    "0": "i00",
+    "1": "i01",
+    "2": "i02",
+    "3": "i03",
+    "4": "i04",
+    "5": "i05",
+    "6": "i06",
+    "7": "i07",
+    "8": "i08",
+    "9": "i09",
+}
+
+def render(n):
+    ntr = index[n] # number to render
+    lw = globals()[ntr] # list with number
+    ln1 = f"{lw[0]}"
+    ln2 = f"{lw[1]}"
+    ln3 = f"{lw[2]}"
+    ln4 = f"{lw[3]}"
+    ln5 = f"{lw[4]}"
+    ln6 = f"{lw[5]}"
+    return ln1, ln2, ln3, ln4, ln5, ln6
 
 output = TextArea(
     focusable=False,
@@ -25,12 +130,31 @@ def get_width():
 
 
 def loop():
-    global utime # variables must be put here
+    global votes
     while True:
-        time.sleep(1)
-        utime += 1
-        output.text = (f"Uptime:".center(get_width()) + "\n" + 
-                        f"{utime}".center(get_width())
+        time.sleep(0.001)
+        pln1 = ""
+        pln2 = ""
+        pln3 = ""
+        pln4 = ""
+        pln5 = ""
+        pln6 = ""
+        for digits in str(votes):
+            aln1, aln2, aln3, aln4, aln5, aln6 = render(digits)
+            pln1 += aln1
+            pln2 += aln2
+            pln3 += aln3
+            pln4 += aln4
+            pln5 += aln5
+            pln6 += aln6
+        output.text = (f"Votes:".center(get_width()) + "\n" + 
+                        f"{pln1}".center(get_width()) + "\n" +
+                        f"{pln2}".center(get_width()) + "\n" +
+                        f"{pln3}".center(get_width()) + "\n" +
+                        f"{pln4}".center(get_width()) + "\n" +
+                        f"{pln5}".center(get_width()) + "\n" +
+                        f"{pln6}".center(get_width()) + "\n" +
+                        f"----".center(get_width())
         ) # put text in output.text to add it
         try:
             get_app().invalidate()
@@ -48,12 +172,14 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
+    global votes
     width = get_width()
 
     text = input_box.text.strip()
     cmds = ["x", "x"]
     cmds = text.lower().split()
     if not cmds:
+        votes += 1
         cmds.append("x")
 
     if cmds[0] == "quit" or cmds[0] == "q":
