@@ -15,7 +15,7 @@ m_u = 1 # amount of upgrades on money
 v_u = 1 # amount of upgrades on votes
 uv_cost = 0
 mv_cost = 0
-pv = 1000000
+pv = 100000
 rank = "Local"
 pn = 1
 pb = 1
@@ -252,7 +252,8 @@ def command(event):
         else:
             money += 1*m_u*pb
         cmds.append("x")
-    
+
+
     if cmds[0] == "m" or cmds[0] == "mode":
         if mode == "votes":
             mode = "money"
@@ -272,6 +273,14 @@ def command(event):
         if money >= mv_cost:
             money -= mv_cost
             m_u += 1
+    if cmds[0] == "p" or cmds[0] == "prestige":
+        if votes >= pv:
+            votes = 0
+            money = 0
+            v_u = 0
+            m_u = 0
+            pn += 1
+            pv *= 10
     if cmds[0] == "quit" or cmds[0] == "q":
         # commands are written like this
         get_app().exit()
