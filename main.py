@@ -11,6 +11,13 @@ votes = 0
 mode = "votes"
 money = 0
 
+m_u = 1 # amount of upgrades on money
+v_u = 1 # amount of upgrades on votes
+uv_cost = 0
+mv_cost = 0
+
+screen = "main" # too lazy to do enumerators and uh im lazy thanks
+
 i01 = ["   ██╗   ",
        "  ███║   ",
        "  ╚██║   ",
@@ -142,7 +149,7 @@ def get_width():
 
 
 def loop():
-    global votes, mode, money
+    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u
     while True:
         time.sleep(0.001)
         pln1 = ""
@@ -158,7 +165,8 @@ def loop():
         mln4 = ""
         mln5 = ""
         mln6 = ""
-
+        mv_cost = 50 * m_u * 2
+        uv_cost = 100 * v_u * 2
         for digits in str(votes):
             aln1, aln2, aln3, aln4, aln5, aln6 = render(digits)
             pln1 += aln1
@@ -176,26 +184,36 @@ def loop():
             mln5 += aln5
             mln6 += aln6
 
-
-        output.text = ( f"Mode: Generating {mode}".center(get_width()) + "\n" +
-                        f"»-----------------------------------------«".center(get_width()) + "\n" +
-                        f"Votes:".center(get_width()) + "\n" + 
-                        f"{pln1}".center(get_width()) + "\n" +
-                        f"{pln2}".center(get_width()) + "\n" +
-                        f"{pln3}".center(get_width()) + "\n" +
-                        f"{pln4}".center(get_width()) + "\n" +
-                        f"{pln5}".center(get_width()) + "\n" +
-                        f"{pln6}".center(get_width()) + "\n" +
-                        f"»-----------------------------------------«".center(get_width()) + "\n" +
-                        f"Money:".center(get_width()) + "\n" + 
-                        f"{dollar[0]}   {mln1}".center(get_width()) + "\n" +
-                        f"{dollar[1]}   {mln2}".center(get_width()) + "\n" +
-                        f"{dollar[2]}   {mln3}".center(get_width()) + "\n" +
-                        f"{dollar[3]}   {mln4}".center(get_width()) + "\n" +
-                        f"{dollar[4]}   {mln5}".center(get_width()) + "\n" +
-                        f"{dollar[5]}   {mln6}".center(get_width()) + "\n" +
-                        f"»-----------------------------------------«".center(get_width()) 
-        ) # put text in output.text to add it
+        if screen == "main":
+            output.text = ( f"Mode: Generating {mode}".center(get_width()) + "\n" +
+                            f"»-----------------------------------------«".center(get_width()) + "\n" +
+                            f"Votes:".center(get_width()) + "\n" + 
+                            f"{pln1}".center(get_width()) + "\n" +
+                            f"{pln2}".center(get_width()) + "\n" +
+                            f"{pln3}".center(get_width()) + "\n" +
+                            f"{pln4}".center(get_width()) + "\n" +
+                            f"{pln5}".center(get_width()) + "\n" +
+                            f"{pln6}".center(get_width()) + "\n" +
+                            f"»-----------------------------------------«".center(get_width()) + "\n" +
+                            f"Money:".center(get_width()) + "\n" + 
+                            f"{dollar[0]}   {mln1}".center(get_width()) + "\n" +
+                            f"{dollar[1]}   {mln2}".center(get_width()) + "\n" +
+                            f"{dollar[2]}   {mln3}".center(get_width()) + "\n" +
+                            f"{dollar[3]}   {mln4}".center(get_width()) + "\n" +
+                            f"{dollar[4]}   {mln5}".center(get_width()) + "\n" +
+                            f"{dollar[5]}   {mln6}".center(get_width()) + "\n" +
+                            f"»-----------------------------------------«".center(get_width()) 
+            ) # put text in output.text to add it
+        if screen == "shop":
+            output.text = ( f"| Money: ${money} | Votes: {votes} |".center(get_width()) + "\n" +
+                            f"Super realistic shop".center(get_width()) + "\n" +
+                            f"»-----------------------------------------«".center(get_width()) + "\n" +
+                            f"[uv1] +1 vote per - ${uv_cost}".center(get_width()) + "\n" +
+                            f"»-----------------------------------------«".center(get_width()) + "\n" +
+                            f"[mv1] +1 money per - ${mv_cost}".center(get_width()) + "\n" +
+                            f"»-----------------------------------------«".center(get_width()) + "\n" +
+                            f"Type 'main' to exit".center(get_width())
+            )
         try:
             get_app().invalidate()
         except Exception:
@@ -212,7 +230,7 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
-    global votes, mode, money
+    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u
     width = get_width()
 
     text = input_box.text.strip()
@@ -220,9 +238,9 @@ def command(event):
     cmds = text.lower().split()
     if not cmds:
         if mode == "votes":
-            votes += 1
+            votes += 1*v_u
         else:
-            money += 1
+            money += 1*m_u
         cmds.append("x")
     
     if cmds[0] == "m" or cmds[0] == "mode":
@@ -230,8 +248,20 @@ def command(event):
             mode = "money"
         else:
             mode = "votes"
+    if cmds[0] == "shop" or cmds[0] == "s":
+        screen = "shop"
 
+    if cmds[0] == "main":
+        screen = "main"
 
+    if cmds[0] == "uv1":
+        if money >= uv_cost:
+            money -= uv_cost
+            v_u += 1
+    if cmds[0] == "mv1":
+        if money >= mv_cost:
+            money -= mv_cost
+            m_u += 1
     if cmds[0] == "quit" or cmds[0] == "q":
         # commands are written like this
         get_app().exit()
