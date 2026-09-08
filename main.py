@@ -253,6 +253,8 @@ def command(event):
             money += 1*m_u*pb
         cmds.append("x")
 
+    
+
 
     if cmds[0] == "m" or cmds[0] == "mode":
         if mode == "votes":
