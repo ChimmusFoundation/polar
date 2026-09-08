@@ -8,6 +8,8 @@ import time
 import shutil
 
 votes = 0
+mode = "votes"
+money = 0
 
 i01 = ["   ██╗   ",
        "  ███║   ",
@@ -79,6 +81,16 @@ i00 = [" ██████╗ ",
        "╚██████╔╝",
        " ╚═════╝ "]
 
+
+dollar = ["▄▄███▄▄·",
+          "█╔═█═══╝",
+          "███████╗",
+          "════███║",
+          "███████║",
+          "╚═▀▀▀══╝"
+]
+
+
 ansi = [" ",
         " ", # a second one to give more spaces
         "═",
@@ -120,7 +132,7 @@ output = TextArea(
 
 input_box = TextArea(
     height=1,
-    prompt="User $ ",
+    prompt="~ ❯",
 )
 
 
@@ -130,7 +142,7 @@ def get_width():
 
 
 def loop():
-    global votes
+    global votes, mode, money
     while True:
         time.sleep(0.001)
         pln1 = ""
@@ -139,6 +151,14 @@ def loop():
         pln4 = ""
         pln5 = ""
         pln6 = ""
+
+        mln1 = ""
+        mln2 = ""
+        mln3 = ""
+        mln4 = ""
+        mln5 = ""
+        mln6 = ""
+
         for digits in str(votes):
             aln1, aln2, aln3, aln4, aln5, aln6 = render(digits)
             pln1 += aln1
@@ -147,14 +167,34 @@ def loop():
             pln4 += aln4
             pln5 += aln5
             pln6 += aln6
-        output.text = (f"Votes:".center(get_width()) + "\n" + 
+        for digits in str(money): # so bad for memory safety :sob:, poor garbage collector :(
+            aln1, aln2, aln3, aln4, aln5, aln6 = render(digits)
+            mln1 += aln1
+            mln2 += aln2
+            mln3 += aln3
+            mln4 += aln4
+            mln5 += aln5
+            mln6 += aln6
+
+
+        output.text = ( f"Mode: Generating {mode}".center(get_width()) + "\n" +
+                        f"»-----------------------------------------«".center(get_width()) + "\n" +
+                        f"Votes:".center(get_width()) + "\n" + 
                         f"{pln1}".center(get_width()) + "\n" +
                         f"{pln2}".center(get_width()) + "\n" +
                         f"{pln3}".center(get_width()) + "\n" +
                         f"{pln4}".center(get_width()) + "\n" +
                         f"{pln5}".center(get_width()) + "\n" +
                         f"{pln6}".center(get_width()) + "\n" +
-                        f"----".center(get_width())
+                        f"»-----------------------------------------«".center(get_width()) + "\n" +
+                        f"Money:".center(get_width()) + "\n" + 
+                        f"{dollar[0]}   {mln1}".center(get_width()) + "\n" +
+                        f"{dollar[1]}   {mln2}".center(get_width()) + "\n" +
+                        f"{dollar[2]}   {mln3}".center(get_width()) + "\n" +
+                        f"{dollar[3]}   {mln4}".center(get_width()) + "\n" +
+                        f"{dollar[4]}   {mln5}".center(get_width()) + "\n" +
+                        f"{dollar[5]}   {mln6}".center(get_width()) + "\n" +
+                        f"»-----------------------------------------«".center(get_width()) 
         ) # put text in output.text to add it
         try:
             get_app().invalidate()
@@ -172,15 +212,25 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
-    global votes
+    global votes, mode, money
     width = get_width()
 
     text = input_box.text.strip()
     cmds = ["x", "x"]
     cmds = text.lower().split()
     if not cmds:
-        votes += 1
+        if mode == "votes":
+            votes += 1
+        else:
+            money += 1
         cmds.append("x")
+    
+    if cmds[0] == "m" or cmds[0] == "mode":
+        if mode == "votes":
+            mode = "money"
+        else:
+            mode = "votes"
+
 
     if cmds[0] == "quit" or cmds[0] == "q":
         # commands are written like this
