@@ -16,7 +16,7 @@ v_u = 1 # amount of upgrades on votes
 uv_cost = 0
 mv_cost = 0
 pv = 1000000
-rank = Local
+rank = "Local"
 pn = 1
 pb = 1
 
@@ -193,7 +193,7 @@ def loop():
             mln6 += aln6
 
         if screen == "main":
-            output.text = ( f"{votes}".center(get_width()) + "\n" +
+            output.text = ( f" | Votes needed for prestige: {pv} | Rank: {rank} | ".center(get_width()) + " \n" +
                             f"Mode: Generating {mode}".center(get_width()) + "\n" +
                             f"»-----------------------------------------«".center(get_width()) + "\n" +
                             f"Votes:".center(get_width()) + "\n" + 
@@ -211,8 +211,8 @@ def loop():
                             f"{dollar[3]}   {mln4}".center(get_width()) + "\n" +
                             f"{dollar[4]}   {mln5}".center(get_width()) + "\n" +
                             f"{dollar[5]}   {mln6}".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) 
-                            f" | [s] shop | [p] prestige | [main] this menu | [q] quit | "
+                            f"»-----------------------------------------«".center(get_width()) + "\n" +
+                            f" | [s] shop | [p] prestige | [main] this menu | [q] quit | ".center(get_width())
             ) # put text in output.text to add it
         if screen == "shop":
             output.text = ( f"| Money: ${money} | Votes: {votes} |".center(get_width()) + "\n" +
