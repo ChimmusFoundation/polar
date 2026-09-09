@@ -20,6 +20,12 @@ rank = "Local"
 pn = 1
 pb = 1
 
+ranks = ["Normal",
+         "Local",
+         "Regional",
+         "State",
+         "Prime Minister"]
+
 screen = "main" # too lazy to do enumerators and uh im lazy thanks
 
 i01 = ["   ██╗   ",
@@ -149,16 +155,17 @@ input_box = TextArea(
 
 def get_width():
     size = shutil.get_terminal_size(fallback=(120, 24))
-    return size.columns - 4
+    return size.columns - 3
 
 
 def loop():
-    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb
+    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb, ranks
     while True:
         if pn == 1:
             pb = 1
         if pn >= 2:
             pb = pn*10
+        rank = ranks[pn]
         time.sleep(0.001)
         pln1 = ""
         pln2 = ""
@@ -193,26 +200,28 @@ def loop():
             mln6 += aln6
 
         if screen == "main":
-            output.text = ( f" | Votes needed for prestige: {pv} | Rank: {rank} | ".center(get_width()) + " \n" +
-                            f"Mode: Generating {mode}".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"Votes:".center(get_width()) + "\n" + 
-                            f"{pln1}".center(get_width()) + "\n" +
-                            f"{pln2}".center(get_width()) + "\n" +
-                            f"{pln3}".center(get_width()) + "\n" +
-                            f"{pln4}".center(get_width()) + "\n" +
-                            f"{pln5}".center(get_width()) + "\n" +
-                            f"{pln6}".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"Money:".center(get_width()) + "\n" + 
-                            f"{dollar[0]}   {mln1}".center(get_width()) + "\n" +
-                            f"{dollar[1]}   {mln2}".center(get_width()) + "\n" +
-                            f"{dollar[2]}   {mln3}".center(get_width()) + "\n" +
-                            f"{dollar[3]}   {mln4}".center(get_width()) + "\n" +
-                            f"{dollar[4]}   {mln5}".center(get_width()) + "\n" +
-                            f"{dollar[5]}   {mln6}".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f" | [s] shop | [p] prestige | [main] this menu | [q] quit | ".center(get_width())
+            output.text = ( f"╭{"":─^{get_width()}}╮" +
+                            "\n│" + f" | Votes needed for prestige: {pv} | Rank: {rank} | ".center(get_width()) + "│\n│" +
+                            f"Mode: Generating {mode}".center(get_width()) + "│\n│" +
+                            f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f"Votes:".center(get_width()) + "│\n│" + 
+                            f"{pln1}".center(get_width()) + "│\n│" +
+                            f"{pln2}".center(get_width()) + "│\n│" +
+                            f"{pln3}".center(get_width()) + "│\n│" +
+                            f"{pln4}".center(get_width()) + "│\n│" +
+                            f"{pln5}".center(get_width()) + "│\n│" +
+                            f"{pln6}".center(get_width()) + "│\n│" +
+                            f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f"Money:".center(get_width()) + "│\n│" + 
+                            f"{dollar[0]}   {mln1}".center(get_width()) + "│\n│" +
+                            f"{dollar[1]}   {mln2}".center(get_width()) + "│\n│" +
+                            f"{dollar[2]}   {mln3}".center(get_width()) + "│\n│" +
+                            f"{dollar[3]}   {mln4}".center(get_width()) + "│\n│" +
+                            f"{dollar[4]}   {mln5}".center(get_width()) + "│\n│" +
+                            f"{dollar[5]}   {mln6}".center(get_width()) + "│\n│" +
+                            f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f" | [s] shop | [p] prestige | [main] this menu | [q] quit | ".center(get_width()) + "│\n" 
+                            f"╰{"":─^{get_width()}}╯"
             ) # put text in output.text to add it
         if screen == "shop":
             output.text = ( f"| Money: ${money} | Votes: {votes} |".center(get_width()) + "\n" +
@@ -240,7 +249,7 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
-    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb
+    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb, ranks
     width = get_width()
 
     text = input_box.text.strip()
