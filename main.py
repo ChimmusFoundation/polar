@@ -6,6 +6,7 @@ from prompt_toolkit.key_binding import KeyBindings
 import threading
 import time
 import shutil
+from datetime import datetime
 
 votes = 0
 mode = "votes"
@@ -19,6 +20,7 @@ pv = 100000
 rank = "Local"
 pn = 1
 pb = 1
+notif = ""
 
 ranks = ["Normal",
          "Local",
@@ -159,7 +161,7 @@ def get_width():
 
 
 def loop():
-    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb, ranks
+    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb, ranks, notif
     while True:
         if pn == 1:
             pb = 1
@@ -201,7 +203,7 @@ def loop():
 
         if screen == "main":
             output.text = ( f"╭{"":─^{get_width()}}╮" +
-                            "\n│" + f" | Votes needed for prestige: {pv} | Rank: {rank} | ".center(get_width()) + "│\n│" +
+                            "\n│" + f" | Votes needed for prestige: {pv} | Rank: {rank} | Time: {datetime.now().strftime("%H:%M:%S")} |".center(get_width()) + "│\n│" +
                             f"Mode: Generating {mode}".center(get_width()) + "│\n│" +
                             f"»-----------------------------------------«".center(get_width()) + "│\n│" +
                             f"Votes:".center(get_width()) + "│\n│" + 
@@ -220,6 +222,7 @@ def loop():
                             f"{dollar[4]}   {mln5}".center(get_width()) + "│\n│" +
                             f"{dollar[5]}   {mln6}".center(get_width()) + "│\n│" +
                             f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f"{notif}".center(get_width()) + "│\n│" + 
                             f" | [s] shop | [p] prestige | [main] this menu | [q] quit | ".center(get_width()) + "│\n" 
                             f"╰{"":─^{get_width()}}╯"
             ) # put text in output.text to add it
@@ -251,7 +254,7 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
-    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb, ranks
+    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb, ranks, notif
     width = get_width()
 
     text = input_box.text.strip()
@@ -281,10 +284,12 @@ def command(event):
         if money >= uv_cost:
             money -= uv_cost
             v_u += 1
+            notif = f"{datetime.now().strftime("%H:%M:%S")} Upgraded Votes"
     if cmds[0] == "mv1":
         if money >= mv_cost:
             money -= mv_cost
             m_u += 1
+            notif = f"{datetime.now().strftime("%H:%M:%S")} Upgraded Money"
     if cmds[0] == "p" or cmds[0] == "prestige":
         if votes >= pv:
             votes = 0
@@ -293,6 +298,7 @@ def command(event):
             m_u = 1
             pn += 1
             pv *= 10
+            notif = f"{datetime.now().strftime("%H:%M:%S")} Prestiged to {ranks[pn]}"
     if cmds[0] == "quit" or cmds[0] == "q":
         # commands are written like this
         get_app().exit()
