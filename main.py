@@ -28,7 +28,7 @@ ranks = ["Normal",
          "State",
          "Prime Minister"]
 
-screen = "main" # too lazy to do enumerators and uh im lazy thanks
+screen = "start" # too lazy to do enumerators and uh im lazy thanks
 
 i01 = ["   ██╗   ",
        "  ███║   ",
@@ -200,7 +200,21 @@ def loop():
             mln4 += aln4
             mln5 += aln5
             mln6 += aln6
+        if screen == "start":
+            output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" + 
+                "   ▄███████▄  ▄██████▄   ▄█          ▄████████    ▄████████".center(get_width()) + "│\n│" +
+                "  ███    ███ ███    ███ ███         ███    ███   ███    ███".center(get_width()) + "│\n│" +
+                "  ███    ███ ███    ███ ███         ███    ███   ███    ███".center(get_width()) + "│\n│" +
+                "  ███    ███ ███    ███ ███         ███    ███  ▄███▄▄▄▄██▀".center(get_width()) + "│\n│" +
+                "▀█████████▀  ███    ███ ███       ▀███████████ ▀▀███▀▀▀▀▀  ".center(get_width()) + "│\n│" +
+                "  ███        ███    ███ ███         ███    ███ ▀███████████".center(get_width()) + "│\n│" +
+                "  ███        ███    ███ ███▌    ▄   ███    ███   ███    ███".center(get_width()) + "│\n│" +
+                " ▄████▀       ▀██████▀  █████▄▄██   ███    █▀    ███    ███".center(get_width()) + "│\n│" +
+                "                        ▀                        ███    ███".center(get_width()) + "│\n│" +
+                "Click enter to start, or type q and click enter to quit".center(get_width()) + "│\n" +
+                f"╰{"":─^{get_width()}}╯"
 
+            )
         if screen == "main":
             output.text = ( f"╭{"":─^{get_width()}}╮" +
                             "\n│" + f" | Votes needed for prestige: {pv} | Rank: {rank} | Time: {datetime.now().strftime("%H:%M:%S")} |".center(get_width()) + "│\n│" +
@@ -261,12 +275,16 @@ def command(event):
     cmds = ["x", "x"]
     cmds = text.lower().split()
     if not cmds:
+        if screen == "start":
+            screen = "main"
         if mode == "votes":
             votes += 1*v_u*pb
         else:
             money += 1*m_u*pb
         cmds.append("x")
-
+    else:
+        if screen == "start":
+            screen = "main"
     # hi
 
     if cmds[0] == "m" or cmds[0] == "mode":
@@ -277,7 +295,7 @@ def command(event):
     if cmds[0] == "shop" or cmds[0] == "s":
         screen = "shop"
 
-    if cmds[0] == "main":
+    if cmds[0] == "main" or cmds[0] == "ma":
         screen = "main"
 
     if cmds[0] == "uv1":
