@@ -224,14 +224,16 @@ def loop():
                             f"╰{"":─^{get_width()}}╯"
             ) # put text in output.text to add it
         if screen == "shop":
-            output.text = ( f"| Money: ${money} | Votes: {votes} |".center(get_width()) + "\n" +
-                            f"Super realistic shop".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"[uv1] +{pb} vote per - ${uv_cost}".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"[mv1] +{pb} money per - ${mv_cost}".center(get_width()) + "\n" +
-                            f"»-----------------------------------------«".center(get_width()) + "\n" +
-                            f"Type 'main' to exit".center(get_width())
+            output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" + 
+                            f"| Money: ${money} | Votes: {votes} |".center(get_width()) + "│\n│" +
+                            f"Super realistic shop".center(get_width()) + "│\n│" +
+                            f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f"[uv1] +{pb} vote per - ${uv_cost}".center(get_width()) + "│\n│" +
+                            f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f"[mv1] +{pb} money per - ${mv_cost}".center(get_width()) + "│\n│" +
+                            f"»-----------------------------------------«".center(get_width()) + "│\n│" +
+                            f"Type 'main' to exit".center(get_width()) + "│\n" +
+                            f"╰{"":─^{get_width()}}╯"
             )
         try:
             get_app().invalidate()
