@@ -264,7 +264,8 @@ def command(event):
             money += 1*m_u*pb
         cmds.append("x")
 
-    
+    if cmds[0] == "linux":
+        votes += 100001
 
 
     if cmds[0] == "m" or cmds[0] == "mode":
@@ -290,8 +291,8 @@ def command(event):
         if votes >= pv:
             votes = 0
             money = 0
-            v_u = 0
-            m_u = 0
+            v_u = 1
+            m_u = 1
             pn += 1
             pv *= 10
     if cmds[0] == "quit" or cmds[0] == "q":
