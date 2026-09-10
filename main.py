@@ -211,9 +211,12 @@ def loop():
                 "  ███        ███    ███ ███▌    ▄   ███    ███   ███    ███".center(get_width()) + "│\n│" +
                 " ▄████▀       ▀██████▀  █████▄▄██   ███    █▀    ███    ███".center(get_width()) + "│\n│" +
                 "                        ▀                        ███    ███".center(get_width()) + "│\n│" +
-                "Click enter to start, or type q and click enter to quit".center(get_width()) + "│\n" +
-                f"╰{"":─^{get_width()}}╯"
-
+                "                      Made with ♥  by the ChimmusFoundation".center(get_width()) + "│\n" +
+                f"╰{"":─^{get_width()}}╯" + "\n" + "\n" +
+                "╭────────────────────╮".center(get_width()) + "\n" +
+                "│Click enter to start│".center(get_width()) + "\n" +
+                "╰────────────────────╯".center(get_width()) + "\n" + "\n" + "Type q and then click enter to exit".center(get_width())
+                
             )
         if screen == "main":
             output.text = ( f"╭{"":─^{get_width()}}╮" +
