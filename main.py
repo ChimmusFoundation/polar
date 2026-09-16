@@ -7,6 +7,7 @@ import threading
 import time
 import shutil
 from datetime import datetime
+import render as rn
 
 votes = 0
 mode = "votes"
@@ -30,77 +31,6 @@ ranks = ["Normal",
 
 screen = "start" # too lazy to do enumerators and uh im lazy thanks
 
-i01 = ["   ██╗   ",
-       "  ███║   ",
-       "  ╚██║   ",
-       "   ██║   ",
-       "   ██║   ",
-       "   ╚═╝   "]
-
-i02 = ["██████╗  ",
-       "╚════██╗ ",
-       " █████╔╝ ",
-       "██╔═══╝  ",
-       "███████╗ ",
-       "╚══════╝ "]
-
-i03 = ["██████╗  ",
-       "╚════██╗ ",
-       " █████╔╝ ",
-       " ╚═══██╗ ",
-       "██████╔╝ ",
-       "╚═════╝  "]
-
-i04 = ["██╗  ██╗ ",
-       "██║  ██║ ",
-       "███████║ ",
-       "╚════██║ ",
-       "     ██║ ",
-       "     ╚═╝ "]
-
-i05 = ["███████╗ ",
-       "██╔════╝ ",
-       "███████╗ ",
-       "╚════██║ ",
-       "███████║ ",
-       "╚══════╝ "]
-
-i06 = [" ██████╗ ",
-       "██╔════╝ ",
-       "███████╗ ",
-       "██╔═══██╗",
-       "╚██████╔╝",
-       " ╚═════╝ "]
-
-i07 = ["███████╗ ",
-       "╚════██║ ",
-       "    ██╔╝ ",
-       "   ██╔╝  ",
-       "   ██║   ",
-       "   ╚═╝   "]
-
-i08 = [" █████╗  ",
-       "██╔══██╗ ",
-       "╚█████╔╝ ",
-       "██╔══██╗ ",
-       "╚█████╔╝ ",
-       " ╚════╝  "]
-
-i09 = [" █████╗  ",
-       "██╔══██╗ ",
-       "╚██████║ ",
-       " ╚═══██║ ",
-       " █████╔╝ ",
-       " ╚════╝  "]
-
-i00 = [" ██████╗ ",
-       "██╔═████╗",
-       "██║██╔██║",
-       "████╔╝██║",
-       "╚██████╔╝",
-       " ╚═════╝ "]
-
-
 dollar = ["▄▄███▄▄·",
           "█╔═█═══╝",
           "███████╗",
@@ -110,40 +40,6 @@ dollar = ["▄▄███▄▄·",
 ]
 
 
-ansi = [" ",
-        " ", # a second one to give more spaces
-        "═",
-        "║",
-        "╔",
-        "╗",
-        "╚",
-        "╝",
-        "█"]
-
-
-index = {
-    "0": "i00",
-    "1": "i01",
-    "2": "i02",
-    "3": "i03",
-    "4": "i04",
-    "5": "i05",
-    "6": "i06",
-    "7": "i07",
-    "8": "i08",
-    "9": "i09",
-}
-
-def render(n):
-    ntr = index[n] # number to render
-    lw = globals()[ntr] # list with number
-    ln1 = f"{lw[0]}"
-    ln2 = f"{lw[1]}"
-    ln3 = f"{lw[2]}"
-    ln4 = f"{lw[3]}"
-    ln5 = f"{lw[4]}"
-    ln6 = f"{lw[5]}"
-    return ln1, ln2, ln3, ln4, ln5, ln6
 
 output = TextArea(
     focusable=False,
@@ -185,21 +81,19 @@ def loop():
         mv_cost = 50 * m_u * 2
         uv_cost = 100 * v_u * 2
         for digits in str(votes):
-            aln1, aln2, aln3, aln4, aln5, aln6 = render(digits)
-            pln1 += aln1
-            pln2 += aln2
-            pln3 += aln3
-            pln4 += aln4
-            pln5 += aln5
-            pln6 += aln6
-        for digits in str(money): # so bad for memory safety :sob:, poor garbage collector :(
-            aln1, aln2, aln3, aln4, aln5, aln6 = render(digits)
-            mln1 += aln1
-            mln2 += aln2
-            mln3 += aln3
-            mln4 += aln4
-            mln5 += aln5
-            mln6 += aln6
+            pln1 += rn.render(digits, 0)
+            pln2 += rn.render(digits, 1)
+            pln3 += rn.render(digits, 2)
+            pln4 += rn.render(digits, 3)
+            pln5 += rn.render(digits, 4)
+            pln6 += rn.render(digits, 5)
+        for digits in str(money):             
+            mln1 += rn.render(digits, 0)
+            mln2 += rn.render(digits, 1)
+            mln3 += rn.render(digits, 2)
+            mln4 += rn.render(digits, 3)
+            mln5 += rn.render(digits, 4)
+            mln6 += rn.render(digits, 5)
         if screen == "start":
             output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" + 
                 "   ▄███████▄  ▄██████▄   ▄█          ▄████████    ▄████████".center(get_width()) + "│\n│" +
