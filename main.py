@@ -50,6 +50,12 @@ input_box = TextArea(
     prompt="~ ❯",
 )
 
+def is_int(input):
+    try:
+        int(input)
+        return True
+    except ValueError:
+        return False
 
 def get_width():
     size = shutil.get_terminal_size(fallback=(120, 24))
@@ -151,6 +157,16 @@ def loop():
                             f"Type 'main' to exit".center(get_width()) + "│\n" +
                             f"╰{"":─^{get_width()}}╯"
             )
+        if screen == "ginfo":
+            output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" + 
+                            f"".center(get_width()) + "│\n│" +
+                            f"To make a 'guess' use the guess command followed by the number of digits".center(get_width()) + "│\n│" +
+                            f"For example: guess 2".center(get_width()) + "│\n│" +
+                            f"Places a guess, it would use a 2 digit number and cost $100".center(get_width()) + "│\n│" +
+                            f"You will need to watch a compulsory animation".center(get_width()) + "│\n│" +
+                            f"".center(get_width()) + "│\n" + 
+                            f"╰{"":─^{get_width()}}╯"
+            )
         try:
             get_app().invalidate()
         except Exception:
@@ -173,6 +189,8 @@ def command(event):
     text = input_box.text.strip()
     cmds = ["x", "x"]
     cmds = text.lower().split()
+    if screen == "guess":
+        cmds = ["DONT DISTURB"]
     if not cmds:
         if screen == "start":
             screen = "main"
@@ -185,6 +203,18 @@ def command(event):
         if screen == "start":
             screen = "main"
     # hi
+    if len(cmds) == 1:
+        if cmds[0] == "guess" or cmds[0] == "g":
+            screen = "ginfo"
+    if len(cmds) >= 2:
+        if cmds[0] == "guess" or cmds[0] == "g":
+            if is_int(cmds[1]):
+                gnum = int(cmds[1])
+                if money >= 10 * (10 ** gnum):
+                    screen == "guess"
+                else:
+                    notif = f"{datetime.now().strftime("%H:%M:%S")} Too Poor to play Guess"
+
 
     if cmds[0] == "m" or cmds[0] == "mode":
         if mode == "votes":
@@ -216,6 +246,8 @@ def command(event):
             pn += 1
             pv *= 10
             notif = f"{datetime.now().strftime("%H:%M:%S")} Prestiged to {ranks[pn]}"
+
+
     if cmds[0] == "quit" or cmds[0] == "q":
         # commands are written like this
         get_app().exit()
