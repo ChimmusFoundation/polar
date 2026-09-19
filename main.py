@@ -95,7 +95,8 @@ def loop():
             mln5 += rn.render(digits, 4)
             mln6 += rn.render(digits, 5)
         if screen == "start":
-            output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" + 
+            output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" +
+                "".center(get_width()) + "│\n│" +
                 "   ▄███████▄  ▄██████▄   ▄█          ▄████████    ▄████████".center(get_width()) + "│\n│" +
                 "  ███    ███ ███    ███ ███         ███    ███   ███    ███".center(get_width()) + "│\n│" +
                 "  ███    ███ ███    ███ ███         ███    ███   ███    ███".center(get_width()) + "│\n│" +
@@ -105,7 +106,8 @@ def loop():
                 "  ███        ███    ███ ███▌    ▄   ███    ███   ███    ███".center(get_width()) + "│\n│" +
                 " ▄████▀       ▀██████▀  █████▄▄██   ███    █▀    ███    ███".center(get_width()) + "│\n│" +
                 "                        ▀                        ███    ███".center(get_width()) + "│\n│" +
-                "                      Made with ♥  by the ChimmusFoundation".center(get_width()) + "│\n" +
+                "                      Made with ♥  by the ChimmusFoundation".center(get_width()) + "│\n│" +
+                "".center(get_width()-7) + "   v1.0│\n" +
                 f"╰{"":─^{get_width()}}╯" + "\n" + "\n" +
                 "╭────────────────────╮".center(get_width()) + "\n" +
                 "│Click enter to start│".center(get_width()) + "\n" +
