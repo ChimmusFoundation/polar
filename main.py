@@ -8,6 +8,7 @@ import time
 import shutil
 from datetime import datetime
 import render as rn
+import guess as gu
 
 votes = 0
 mode = "votes"
@@ -22,6 +23,7 @@ rank = "Local"
 pn = 1
 pb = 1
 notif = ""
+gnum = 2
 
 ranks = ["Normal",
          "Local",
@@ -50,6 +52,8 @@ input_box = TextArea(
     prompt="~ ❯",
 )
 
+
+
 def is_int(input):
     try:
         int(input)
@@ -63,7 +67,7 @@ def get_width():
 
 
 def loop():
-    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb, ranks, notif
+    global votes, mode, money, mv_cost, uv_cost, screen, v_u, m_u, pv, rank, pn, pb, ranks, notif, gnum
     while True:
         if pn == 1:
             pb = 1
@@ -167,6 +171,26 @@ def loop():
                             f"".center(get_width()) + "│\n" + 
                             f"╰{"":─^{get_width()}}╯"
             )
+        if screen == "guess":
+            for i in range(gnum):
+                g1 += render("r", 0)
+                g2 += render("r", 1)
+                g3 += render("r", 2)
+                g4 += render("r", 3)
+                g5 += render("r", 4)
+                g6 += render("r", 5)
+
+            output.text = ( f"╭{"":─^{get_width()}}╮" + "\n│" + 
+                            f"".center(get_width()) + "│\n│" +
+                            f"{g1}".center(get_width()) + "│\n│" +
+                            f"{g2}".center(get_width()) + "│\n│" +
+                            f"{g3}".center(get_width()) + "│\n│" +
+                            f"{g4}".center(get_width()) + "│\n│" +
+                            f"{g5}".center(get_width()) + "│\n│" +
+                            f"{g6}".center(get_width()) + "│\n│" +
+                            f"".center(get_width()) + "│\n" + 
+                            f"╰{"":─^{get_width()}}╯"
+            )
         try:
             get_app().invalidate()
         except Exception:
@@ -183,7 +207,7 @@ kb = KeyBindings()
 
 @kb.add("enter")
 def command(event):
-    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb, ranks, notif
+    global votes, mode ,money ,screen ,mv_cost ,uv_cost ,v_u ,m_u , pv, rank,pn , pb, ranks, notif, gnum
     width = get_width()
 
     text = input_box.text.strip()
@@ -210,7 +234,7 @@ def command(event):
         if cmds[0] == "guess" or cmds[0] == "g":
             if is_int(cmds[1]):
                 gnum = int(cmds[1])
-                if money >= 10 * (10 ** gnum):
+                if money >= (10 ** gnum):
                     screen == "guess"
                 else:
                     notif = f"{datetime.now().strftime("%H:%M:%S")} Too Poor to play Guess"

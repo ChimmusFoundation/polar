@@ -103,9 +103,14 @@ index = {
 }
 
 def render(n, ln):
-    requested = index[n] # number to render
-    list_number = globals()[requested] # list with number
-    rendered = f"{list_number[ln]}"
+    if n == "r":
+        rendered = ""
+        for i in range(9):
+            rendered += rand.choice(ansi)
+    else:
+        requested = index[n] # number to render
+        list_number = globals()[requested] # list with number
+        rendered = f"{list_number[ln]}"
     return rendered
 
 
